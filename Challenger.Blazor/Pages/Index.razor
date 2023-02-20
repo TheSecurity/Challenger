@@ -1,0 +1,37 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Champions</h1>
+
+
+@if (Champions.Any())
+{
+    <div class="d-flex flex-row flex-wrap m-3 p-3" style="max-height:800px;">
+        @foreach (var c in Champions)
+        {
+            <div class="p-1 m-1 border">
+                <div class="d-flex flex-column">
+                    <img src="@c.ImageUrl" style="width:96px; height:96px;">
+                    <div class="mt-1"><b>@c.Id</b></div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-danger">No champions found.</div>
+}
+
+
+
+@code
+{
+    private IEnumerable<ChampionDto> Champions = new List<ChampionDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Champions = (await ChampionService.GetChampionsAsync()) ?? new List<ChampionDto>();
+    }
+}
