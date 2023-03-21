@@ -1,8 +1,12 @@
+using Challenger.Storage.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddScoped<IChampionStorage, ChampionMemoryStorage>();
+builder.Services.AddScoped<IChallengeStorage, ChallengeMemoryStorage>();
 
 var app = builder.Build();
 

@@ -4,7 +4,8 @@ namespace Challenger.Blazor.Models;
 
 public record ChampionModel
 (
-    string Id,
+    [JsonProperty(PropertyName = "id")]
+    string Name,
     ChampionImageModel Image
 );
 
