@@ -1,4 +1,4 @@
-﻿using Challenger.Blazor.Dtos;
+﻿using Challenger.Storage.Dtos;
 using Challenger.Blazor.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,9 +15,16 @@ public class ChampionJsonConverter : JsonConverter<IEnumerable<ChampionDto>>
         JObject jObject = JObject.Load(reader);
 
         var values = jObject.GetValue("data")?.Values().ToList();
-        var parsedModels = values?.Select(x => x.ToObject<ChampionModel>()!);
+        var parsedModels = values?.Select(x => x.ToObject<RiotChampionModel>()!);
 
-        return parsedModels?.Select(x => new ChampionDto(x.Id, ChampionPath + x.Image.Name));
+        int i = 1;
+
+        return parsedModels?.Select(x => new ChampionDto
+        {
+            Id = i++,
+            Name = x.Name,
+            ImageUrl = ChampionPath + x.Image.Name
+        });
     }
 
     public override void WriteJson(JsonWriter writer, IEnumerable<ChampionDto>? value, JsonSerializer serializer)

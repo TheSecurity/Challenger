@@ -1,18 +1,32 @@
-﻿using BlazorWebAssemblyDemo.UI.Services;
-using Challenger.Blazor.Dtos;
-using Newtonsoft.Json;
+﻿using Challenger.Blazor.Models;
+using Challenger.Storage.Services;
 
 namespace Challenger.Blazor.Services;
 
 public class ChampionService
 {
-    public static async Task<IEnumerable<ChampionDto>?> GetChampionsAsync()
+    private readonly IChampionStorage _championStorage;
+
+    public ChampionService(IChampionStorage championStorage)
     {
-        using var client = new HttpClient();
+        _championStorage = championStorage;
+    }
 
-        var result = await client.GetAsync("https://ddragon.leagueoflegends.com/cdn/13.3.1/data/en_US/champion.json");
-        var content = await result.Content.ReadAsStringAsync();
+    public async Task<IEnumerable<ChampionModel>> GetChampionsAsync()
+    {
+        var champions = await _championStorage.GetChampionsAsync();
 
-        return JsonConvert.DeserializeObject<IEnumerable<ChampionDto>>(content, new ChampionJsonConverter());
+        List<ChampionModel> result = new List<ChampionModel>();
+
+        foreach(var c in champions)
+            result.Add(new ChampionModel()
+            { 
+                Id = c.Id, 
+                Name = c.Name, 
+                ImageUrl = c.ImageUrl, 
+                Selection = SelectionType.NotSelected
+            });
+
+        return result;
     }
 }
