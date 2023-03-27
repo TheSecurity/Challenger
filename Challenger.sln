@@ -5,7 +5,9 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenger.Blazor", "Challenger.Blazor\Challenger.Blazor.csproj", "{1990362C-EFAB-4AA3-9E9E-0457A4DEAE96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenger.Storage", "Challenger.Storage\Challenger.Storage.csproj", "{BF78D7B5-31EC-4B5B-8287-17F51CDFAD82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenger.Storage", "Challenger.Storage\Challenger.Storage.csproj", "{BF78D7B5-31EC-4B5B-8287-17F51CDFAD82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenger.Importer", "Challenger.Importer\Challenger.Importer.csproj", "{42076634-CAB2-4623-95A8-90BF3A40F848}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BF78D7B5-31EC-4B5B-8287-17F51CDFAD82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF78D7B5-31EC-4B5B-8287-17F51CDFAD82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF78D7B5-31EC-4B5B-8287-17F51CDFAD82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42076634-CAB2-4623-95A8-90BF3A40F848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42076634-CAB2-4623-95A8-90BF3A40F848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42076634-CAB2-4623-95A8-90BF3A40F848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42076634-CAB2-4623-95A8-90BF3A40F848}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,48 +1,39 @@
-﻿using Challenger.Storage.Dtos;
-using Newtonsoft.Json;
+﻿using Challenger.Blazor.Models;
+using Challenger.Storage.Dtos;
+using Challenger.Storage.Services;
 
 namespace Challenger.Blazor.Services;
 
 public class ChallengeService
 {
-    public static async Task SaveChallengesAsync(IEnumerable<ChallengeDto> challenges)
+    private readonly IChallengeStorage _challengeStorage;
+
+    public ChallengeService(IChallengeStorage challengeStorage)
     {
-        string filePath = "C:\\Users\\Tomáš\\Desktop\\challenge_data.json";
-
-        string content = JsonConvert.SerializeObject(challenges, Formatting.Indented);
-
-        await File.WriteAllTextAsync(filePath, content);
+        _challengeStorage = challengeStorage;
     }
 
-    public static async Task SaveChallengeToChampionAsync(IEnumerable<ChampionChallengeDto> championChallenge)
+    public async Task<IEnumerable<ChallengeModel>> GetChallengesAsync()
     {
-        string filePath = "C:\\Users\\Tomáš\\Desktop\\championChallenge_data.json";
+        List<ChallengeModel> result = new List<ChallengeModel>();
 
-        string content = JsonConvert.SerializeObject(championChallenge, Formatting.Indented);
+        List<ChallengeDto> challeges = (await _challengeStorage.GetChallengesAsync()).ToList();
 
-        await File.WriteAllTextAsync(filePath, content);
+        foreach (var c in challeges)
+        {
+            var challenge = new ChallengeModel()
+            {
+                ChampionIds = c.ChampionIds,
+                ExternalId = c.ExternalId,
+                Id = c.Id,
+                ImageUrl = c.ImageUrl,
+                Name = c.Name,
+                Selection = SelectionType.NotSelected
+            };
+
+            result.Add(challenge);
+        }
+
+        return result;
     }
-
-    public static async Task<IEnumerable<ChallengeDto>> GetChallengesAsync()
-    {
-        string filePath = "C:\\Users\\Tomáš\\Desktop\\challenge_data.json";
-
-        string content = await File.ReadAllTextAsync(filePath);
-
-        var challenges = JsonConvert.DeserializeObject<IEnumerable<ChallengeDto>>(content);
-
-        return challenges ?? new List<ChallengeDto>();
-    }
-
-    public static async Task<IEnumerable<ChampionChallengeDto>> GetChampionChallengesAsync()
-    {
-        string filePath = "C:\\Users\\Tomáš\\Desktop\\championChallenge_data.json";
-
-        string content = await File.ReadAllTextAsync(filePath);
-
-        var championChallenges = JsonConvert.DeserializeObject<IEnumerable<ChampionChallengeDto>>(content);
-
-        return championChallenges ?? new List<ChampionChallengeDto>();
-    }
-
 }

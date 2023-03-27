@@ -2,14 +2,14 @@
 
 namespace Challenger.Blazor.Models;
 
-public record ChampionModel
+public record RiotChampionModel
 (
     [JsonProperty(PropertyName = "id")]
     string Name,
-    ChampionImageModel Image
+    RiotChampionImageModel Image
 );
 
-public record ChampionImageModel
+public record RiotChampionImageModel
 (
     [JsonProperty(PropertyName = "full")]
     string Name

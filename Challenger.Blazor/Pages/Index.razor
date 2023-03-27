@@ -1,6 +1,7 @@
 ﻿@page "/"
-@inject IChampionStorage championStorage
-@inject IChallengeStorage challengeStorage
+@inject ChallengeService _challengeService;
+@inject ChampionService _championService;
+
 
 <PageTitle>Index</PageTitle>
 
@@ -26,7 +27,7 @@
     <div class="d-flex flex-row flex-wrap m-3 p-3" style="max-height:800px;">
         @foreach (var c in Champions)
         {
-            <div class="p-1 m-1 border">
+            <div @onclick="() => ChampionClicked(c.Id)" class="p-1 m-1 border">
                 <div class="d-flex flex-column flex-wrap">
                     <img src="@c.ImageUrl" style="width:96px; height:96px;">
                     <div class="mt-1"><b>@c.Name</b></div>
@@ -40,12 +41,10 @@ else
     <div class="text-danger">No champions found.</div>
 }
 
-
-
 @code
 {
-    private IEnumerable<ChampionDto> Champions = new List<ChampionDto>();
-    private IEnumerable<ChallengeDto> Challenges = new List<ChallengeDto>();
+    private List<ChampionModel> Champions = new List<ChampionModel>();
+    private List<ChallengeModel> Challenges = new List<ChallengeModel>();
 
     public Task ChallengeClicked(int id)
     {
@@ -54,33 +53,45 @@ else
         return Task.CompletedTask;
     }
 
+    public Task ChampionClicked(int id)
+    {
+        throw new NotImplementedException();
+
+        return Task.CompletedTask;
+    }
+
     protected override async Task OnInitializedAsync()
     {
+        Champions = (await _championService.GetChampionsAsync()).ToList();
 
-        List<ChampionDto> champs = (await ChampionService.GetChampionsAsync()).ToList() ?? new List<ChampionDto>();
-
-        foreach (ChampionDto c in champs)
-        {
-            await championStorage.CreateChampionAsync(c.Id, c.Name, c.ImageUrl);
-        }
-
-        List<ChallengeDto> challenges = (await ChallengeService.GetChallengesAsync()).ToList() ?? new List<ChallengeDto>();
-
-        foreach (ChallengeDto c in challenges)
-        {
-            await challengeStorage.CreateChallengeAsync(c.Id, c.ExternalId, c.Name, c.ImageUrl);
-        }
-
-        Champions = (await championStorage.GetChampionsAsync()).ToList();
-        Challenges = (await challengeStorage.GetChallengesAsync()).ToList();
-
-        List<ChampionChallengeDto> championToChallege = (await ChallengeService.GetChampionChallengesAsync()).ToList() ?? new List<ChampionChallengeDto>();
+        Challenges = (await _challengeService.GetChallengesAsync()).ToList();
 
 
-        foreach (ChampionChallengeDto c in championToChallege)
-        {
-            await challengeStorage.AddChampionToChallengeAsync(c.ChampionId, c.ChallengeId);
-        }
+
+        //List<ChampionDto> champs = (await ChampionService.GetChampionsAsync()).ToList() ?? new List<ChampionDto>();
+
+        //foreach (ChampionDto c in champs)
+        //{
+        //    await championStorage.CreateChampionAsync(c.Id, c.Name, c.ImageUrl);
+        //}
+
+        //List<ChallengeDto> challenges = (await ChallengeService.GetChallengesAsync()).ToList() ?? new List<ChallengeDto>();
+
+        //foreach (ChallengeDto c in challenges)
+        //{
+        //    await challengeStorage.CreateChallengeAsync(c.Id, c.ExternalId, c.Name, c.ImageUrl);
+        //}
+
+        //Champions = (await championStorage.GetChampionsAsync()).ToList();
+        //Challenges = (await challengeStorage.GetChallengesAsync()).ToList();
+
+        //List<ChampionChallengeDto> championToChallege = (await ChallengeService.GetChampionChallengesAsync()).ToList() ?? new List<ChampionChallengeDto>();
+
+
+        //foreach (ChampionChallengeDto c in championToChallege)
+        //{
+        //    await challengeStorage.AddChampionToChallengeAsync(c.ChampionId, c.ChallengeId);
+        //}
 
         //await championStorage.CreateChampionAsync(1, "A", "B");
         //Champions = (await championStorage.GetChampionsAsync()).Select(x => new ChampionDto

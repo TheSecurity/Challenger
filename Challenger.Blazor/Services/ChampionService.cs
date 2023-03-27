@@ -1,33 +1,32 @@
-﻿using BlazorWebAssemblyDemo.UI.Services;
-using Challenger.Storage.Dtos;
-using Newtonsoft.Json;
+﻿using Challenger.Blazor.Models;
+using Challenger.Storage.Services;
 
 namespace Challenger.Blazor.Services;
 
 public class ChampionService
 {
-    public static async Task<IEnumerable<ChampionDto>?> GetChampionsAsync()
+    private readonly IChampionStorage _championStorage;
+
+    public ChampionService(IChampionStorage championStorage)
     {
-        using var client = new HttpClient();
-
-        var result = await client.GetAsync("https://ddragon.leagueoflegends.com/cdn/13.3.1/data/en_US/champion.json");
-
-        if (!result.IsSuccessStatusCode)
-        {
-            return null;
-        }
-
-        var content = await result.Content.ReadAsStringAsync();
-
-        return JsonConvert.DeserializeObject<IEnumerable<ChampionDto>>(content, new ChampionJsonConverter());
+        _championStorage = championStorage;
     }
 
-    public static async Task SaveChampionsAsync(IEnumerable<ChampionDto> champions)
+    public async Task<IEnumerable<ChampionModel>> GetChampionsAsync()
     {
-        string filePath = "C:\\Users\\Tomáš\\Desktop\\champ_data.json";
+        var champions = await _championStorage.GetChampionsAsync();
 
-        string content = JsonConvert.SerializeObject(champions, Formatting.Indented);
+        List<ChampionModel> result = new List<ChampionModel>();
 
-        await File.WriteAllTextAsync(filePath, content);
+        foreach(var c in champions)
+            result.Add(new ChampionModel()
+            { 
+                Id = c.Id, 
+                Name = c.Name, 
+                ImageUrl = c.ImageUrl, 
+                Selection = SelectionType.NotSelected
+            });
+
+        return result;
     }
 }

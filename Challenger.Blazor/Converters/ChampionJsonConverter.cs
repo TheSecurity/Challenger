@@ -15,7 +15,7 @@ public class ChampionJsonConverter : JsonConverter<IEnumerable<ChampionDto>>
         JObject jObject = JObject.Load(reader);
 
         var values = jObject.GetValue("data")?.Values().ToList();
-        var parsedModels = values?.Select(x => x.ToObject<ChampionModel>()!);
+        var parsedModels = values?.Select(x => x.ToObject<RiotChampionModel>()!);
 
         int i = 1;
 
