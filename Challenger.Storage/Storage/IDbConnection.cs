@@ -1,7 +1,7 @@
-﻿using Challenger.Storage.Entities;
+﻿using Challenger.Core.Entities;
 using MongoDB.Driver;
 
-namespace Challenger.Storage;
+namespace Challenger.Core.Storage;
 
 public interface IDbConnection
 {

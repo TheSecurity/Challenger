@@ -1,6 +1,6 @@
 ﻿@page "/"
-@inject ChallengeService _challengeService;
-@inject ChampionService _championService;
+@inject IChallengeService _challengeService;
+@inject IChampionService _championService;
 
 
 <PageTitle>Index</PageTitle>
@@ -12,9 +12,9 @@
     <div>
         @foreach (var c in Challenges)
         {
-            <div @onclick="() => ChallengeClicked(c.Id)">
-                <img src="@c.ImageUrl" style="width:35px; height:35px;">
-                @c.Name
+            <div @onclick="() => ChallengeClicked(c.Model.Id)">
+                <img src="@c.Model.ImageUrl" style="width:35px; height:35px;">
+                @c.Model.Name
             </div>
 
         }
@@ -27,10 +27,10 @@
     <div class="d-flex flex-row flex-wrap m-3 p-3" style="max-height:800px;">
         @foreach (var c in Champions)
         {
-            <div @onclick="() => ChampionClicked(c.Id)" class="p-1 m-1 border">
+            <div @onclick="() => ChampionClicked(c.Model.Id)" class="p-1 m-1 border">
                 <div class="d-flex flex-column flex-wrap">
-                    <img src="@c.ImageUrl" style="width:96px; height:96px;">
-                    <div class="mt-1"><b>@c.Name</b></div>
+                    <img src="@c.Model.ImageUrl" style="width:96px; height:96px;">
+                    <div class="mt-1"><b>@c.Model.Name</b></div>
                 </div>
             </div>
         }
@@ -43,91 +43,26 @@ else
 
 @code
 {
-    private List<ChampionModel> Champions = new List<ChampionModel>();
-    private List<ChallengeModel> Challenges = new List<ChallengeModel>();
+    private List<SelectionModel<Champion>> Champions = new();
+    private List<SelectionModel<Challenge>> Challenges = new();
 
-    public Task ChallengeClicked(int id)
+    public Task ChallengeClicked(ObjectId id)
     {
         throw new NotImplementedException();
-
-        return Task.CompletedTask;
     }
 
-    public Task ChampionClicked(int id)
+    public Task ChampionClicked(ObjectId id)
     {
         throw new NotImplementedException();
-
-        return Task.CompletedTask;
     }
 
     protected override async Task OnInitializedAsync()
     {
-        Champions = (await _championService.GetChampionsAsync()).ToList();
-
-        Challenges = (await _challengeService.GetChallengesAsync()).ToList();
-
-
-
-        //List<ChampionDto> champs = (await ChampionService.GetChampionsAsync()).ToList() ?? new List<ChampionDto>();
-
-        //foreach (ChampionDto c in champs)
-        //{
-        //    await championStorage.CreateChampionAsync(c.Id, c.Name, c.ImageUrl);
-        //}
-
-        //List<ChallengeDto> challenges = (await ChallengeService.GetChallengesAsync()).ToList() ?? new List<ChallengeDto>();
-
-        //foreach (ChallengeDto c in challenges)
-        //{
-        //    await challengeStorage.CreateChallengeAsync(c.Id, c.ExternalId, c.Name, c.ImageUrl);
-        //}
-
-        //Champions = (await championStorage.GetChampionsAsync()).ToList();
-        //Challenges = (await challengeStorage.GetChallengesAsync()).ToList();
-
-        //List<ChampionChallengeDto> championToChallege = (await ChallengeService.GetChampionChallengesAsync()).ToList() ?? new List<ChampionChallengeDto>();
-
-
-        //foreach (ChampionChallengeDto c in championToChallege)
-        //{
-        //    await challengeStorage.AddChampionToChallengeAsync(c.ChampionId, c.ChallengeId);
-        //}
-
-        //await championStorage.CreateChampionAsync(1, "A", "B");
-        //Champions = (await championStorage.GetChampionsAsync()).Select(x => new ChampionDto
-        //{
-        //    Id = x.Id,
-        //    Name = x.Name,
-        //    ImageUrl = x.ImageUrl
-        //});
-
-
-        //Generování struktury objektů
-        //List<ChampionDto> test = new List<ChampionDto>(){
-        //    new ChampionDto(0, "", "")
-        //};
-        //await ChampionService.SaveChampionsAsync(test);
-
-        //await ChampionService.SaveChampionsAsync(Champions);
-
-        //List<ChallengeDto> challenges = new List<ChallengeDto>(){
-        //    new ChallengeDto
-        //    {
-        //        ChallengeId = 0, 
-        //        Name = ""
-        //    }
-        //};
-        //await ChallengeService.SaveChallengesAsync(challenges);
-
-        //List<ChampionChallengeDto> championChallenges = new List<ChampionChallengeDto>(){
-        //    new ChampionChallengeDto
-        //    {
-        //        ChampionId = 0,
-        //        ChallengeId = 0
-        //    }
-        //};
-        //await ChallengeService.SaveChallengeToChampionAsync(championChallenges);
+        Champions = (await _championService.GetChampionsAsync())
+            .ToSelectionsModel()
+            .ToList();
+        Challenges = (await _challengeService.GetChallengesAsync())
+            .ToSelectionsModel()
+            .ToList();
     }
-
-
 }

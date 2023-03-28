@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>3b28ee2c-0b88-4215-bd4c-13b13a30162b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Challenger.Storage\Challenger.Storage.csproj" />
+    <ProjectReference Include="..\Challenger.Storage\Challenger.Core.csproj" />
   </ItemGroup>
 
 </Project>

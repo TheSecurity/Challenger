@@ -1,11 +1,10 @@
-﻿using Challenger.Storage.Dtos;
-using Challenger.Storage.Entities;
+﻿using Challenger.Core.Entities;
+using MongoDB.Bson;
 
-namespace Challenger.Storage.Repositories
+namespace Challenger.Core.Repositories;
+
+public interface IChallengeRepository
 {
-    public interface IChallengeRepository
-    {
-        Task CreateChallengesAsync(ChallengeDto challenge);
-        Task<IEnumerable<Challenge>> GetChallengesAsync();
-    }
+    Task CreateChallengeAsync(int externalId, string name, string imageUrl, IEnumerable<ObjectId>? championIds = null);
+    Task<IEnumerable<Challenge>> GetChallengesAsync();
 }
