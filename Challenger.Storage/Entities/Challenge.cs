@@ -1,13 +1,12 @@
-using Challenger.Storage.Dtos;
-using System.Collections.Generic;
+using MongoDB.Bson;
 
 namespace Challenger.Storage.Entities;
 
 public class Challenge
 {
-    public int Id { get; set; }
+    public ObjectId Id { get; set; }
     public int ExternalId { get; set; }
     public string Name { get; set; } = default!;
     public string ImageUrl { get; set; } = default!;
-    public ICollection<int>? ChampionIds { get; set; }
+    public ICollection<ObjectId>? ChampionIds { get; set; }
 }

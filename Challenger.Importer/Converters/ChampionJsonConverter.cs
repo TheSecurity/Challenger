@@ -1,7 +1,7 @@
 ﻿using Challenger.Storage.Dtos;
-using Challenger.Blazor.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Challenger.Importer.Models;
 
 namespace BlazorWebAssemblyDemo.UI.Services;
 
