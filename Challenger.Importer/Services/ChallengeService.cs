@@ -13,6 +13,7 @@ public class ChallengeService
 
     public async Task SynchronizeChallangesAsync()
     {
+        await _challengeRepository.CreateChallengesAsync(1, "Name", "aa");
         // Load data from files
         // Store them to DB
     }

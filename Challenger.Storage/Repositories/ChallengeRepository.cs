@@ -1,5 +1,5 @@
-﻿using Challenger.Storage.Dtos;
-using Challenger.Storage.Entities;
+﻿using Challenger.Storage.Entities;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Challenger.Storage.Repositories;
@@ -13,14 +13,19 @@ public class ChallengeRepository : IChallengeRepository
         _challenges = db.ChallengeCollection;
     }
 
-    public async Task<IEnumerable<Challenge>> GetChallengesAsync()
+    public Task<IEnumerable<Challenge>> GetChallengesAsync()
     {
         throw new NotImplementedException();
     }
 
-    public async Task CreateChallengesAsync(ChallengeDto challenge)
+    public async Task CreateChallengesAsync(int externalId, string name, string imageUrl, IEnumerable<ObjectId>? championIds)
     {
-        throw new NotImplementedException();
+        await _challenges.InsertOneAsync(new Challenge
+        {
+            ExternalId = externalId,
+            Name = name,
+            ImageUrl = imageUrl,
+            ChampionIds = championIds
+        });
     }
-
 }

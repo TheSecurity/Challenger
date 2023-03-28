@@ -8,7 +8,7 @@ public class DbConnection : IDbConnection
 {
     private readonly IConfiguration _config;
     private readonly IMongoDatabase _db;
-    private string _connectionId = "MongoDb";
+    private const string _connectionId = "MongoDb";
 
     public string DbName { get; private set; }
     public string ChallengeCollectionName { get; private set; } = "challenges";
@@ -21,11 +21,10 @@ public class DbConnection : IDbConnection
     public DbConnection(IConfiguration config)
     {
         _config = config;
-        Client = new MongoClient(_config.GetConnectionString(_connectionId));
-
-        if (_config["DatabaseName"] is not string name)
-            throw new ArgumentNullException(nameof(DbName));
-        DbName = name;
+        var connectionString = string.Format(_config.GetConnectionString(_connectionId)!, _config["MongoUsername"], _config["MongoPassword"]);
+        Client = new MongoClient(connectionString);
+        
+        DbName = _config["DbName"]!;
 
         _db = Client.GetDatabase(DbName);
 

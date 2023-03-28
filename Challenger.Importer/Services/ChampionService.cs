@@ -11,9 +11,10 @@ public class ChampionService
         _championRepository = championRepository;
     }
 
-    public async Task SynchronizeChampionsAsync()
+    public Task SynchronizeChampionsAsync()
     {
         // Load data from files
         // Store them to DB
+        throw new NotImplementedException();
     }
 }

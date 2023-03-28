@@ -1,30 +1,29 @@
 ﻿using Challenger.Blazor.Models;
-using Challenger.Storage.Services;
+using Challenger.Storage.Entities;
+using Challenger.Storage.Repositories;
 
 namespace Challenger.Blazor.Services;
 
 public class ChampionService
 {
-    private readonly IChampionStorage _championStorage;
+    private readonly IChampionRepository _championRepository;
 
-    public ChampionService(IChampionStorage championStorage)
+    public ChampionService(IChampionRepository championRepository)
     {
-        _championStorage = championStorage;
+        _championRepository = championRepository;
     }
 
-    public async Task<IEnumerable<ChampionModel>> GetChampionsAsync()
+    public async Task<IEnumerable<SelectionModel<Champion>>> GetChampionsAsync()
     {
-        var champions = await _championStorage.GetChampionsAsync();
+        var champions = await _championRepository.GetChampionsAsync();
 
-        List<ChampionModel> result = new();
+        List<SelectionModel<Champion>> result = new();
 
         foreach(var c in champions)
-            result.Add(new ChampionModel()
+            result.Add(new SelectionModel<Champion>()
             { 
-                Id = c.Id, 
-                Name = c.Name, 
-                ImageUrl = c.ImageUrl, 
-                Selection = SelectionType.NotSelected
+                Model = c,
+                Type = SelectionType.NotSelected
             });
 
         return result;
