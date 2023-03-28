@@ -16,7 +16,7 @@ public class ChampionService
     {
         var champions = await _championStorage.GetChampionsAsync();
 
-        List<ChampionModel> result = new List<ChampionModel>();
+        List<ChampionModel> result = new();
 
         foreach(var c in champions)
             result.Add(new ChampionModel()

@@ -15,9 +15,8 @@ public class ChallengeService
 
     public async Task<IEnumerable<ChallengeModel>> GetChallengesAsync()
     {
-        List<ChallengeModel> result = new List<ChallengeModel>();
-
         List<ChallengeDto> challeges = (await _challengeStorage.GetChallengesAsync()).ToList();
+        List<ChallengeModel> result = new();
 
         foreach (var c in challeges)
         {
