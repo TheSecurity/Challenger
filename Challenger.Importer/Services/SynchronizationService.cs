@@ -1,26 +1,20 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Challenger.Core.Services;
 
 namespace Challenger.Importer.Services;
 
-public class SynchronizationService : IHostedService
+public class SynchronizationService
 {
-    private readonly ChallengeService _challengeService;
-    private readonly ChampionService _championService;
+    private readonly IChampionService _championService;
+    private readonly IChallengeService _challengeService;
 
-    public SynchronizationService(ChallengeService challengeService, ChampionService championService)
+    public SynchronizationService(IChampionService championService, IChallengeService challengeService)
     {
-        _challengeService = challengeService;
         _championService = championService;
+        _challengeService = challengeService;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public async Task Run()
     {
-        await _challengeService.SynchronizeChallangesAsync();
-        await _championService.SynchronizeChampionsAsync();
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+        await _challengeService.CreateChallengeAsync(123, "Test", "url");
     }
 }

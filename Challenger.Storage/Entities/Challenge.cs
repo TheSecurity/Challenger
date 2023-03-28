@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 
-namespace Challenger.Storage.Entities;
+namespace Challenger.Core.Entities;
 
 public class Challenge
 {

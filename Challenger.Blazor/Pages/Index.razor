@@ -1,6 +1,6 @@
 ﻿@page "/"
-@inject ChallengeService _challengeService;
-@inject ChampionService _championService;
+@inject IChallengeService _challengeService;
+@inject IChampionService _championService;
 
 
 <PageTitle>Index</PageTitle>
@@ -58,7 +58,11 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Champions = (await _championService.GetChampionsAsync()).ToList();
-        Challenges = (await _challengeService.GetChallengesAsync()).ToList();
+        Champions = (await _championService.GetChampionsAsync())
+            .ToSelectionsModel()
+            .ToList();
+        Challenges = (await _challengeService.GetChallengesAsync())
+            .ToSelectionsModel()
+            .ToList();
     }
 }

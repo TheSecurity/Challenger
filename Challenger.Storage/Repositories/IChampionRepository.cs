@@ -1,7 +1,7 @@
-﻿using Challenger.Storage.Entities;
+﻿using Challenger.Core.Entities;
 using MongoDB.Bson;
 
-namespace Challenger.Storage.Repositories;
+namespace Challenger.Core.Repositories;
 
 public interface IChampionRepository
 {

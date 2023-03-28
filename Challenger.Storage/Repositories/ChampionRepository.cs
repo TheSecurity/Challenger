@@ -1,8 +1,9 @@
-﻿using Challenger.Storage.Entities;
+﻿using Challenger.Core.Entities;
+using Challenger.Core.Storage;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace Challenger.Storage.Repositories;
+namespace Challenger.Core.Repositories;
 
 public class ChampionRepository : IChampionRepository
 {
@@ -13,13 +14,15 @@ public class ChampionRepository : IChampionRepository
         _champions = db.ChampionCollection;
     }
 
-    public Task<IEnumerable<Champion>> GetChampionsAsync()
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<IEnumerable<Champion>> GetChampionsAsync()
+        => await _champions.Find(Builders<Champion>.Filter.Empty)
+            .ToListAsync();
 
-    public Task CreateChampionAsync(string name, string imageUrl, IEnumerable<ObjectId>? challengeIds = null)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task CreateChampionAsync(string name, string imageUrl, IEnumerable<ObjectId>? challengeIds = null)
+        => await _champions.InsertOneAsync(new Champion
+        {
+            Name = name,
+            ImageUrl = imageUrl,
+            ChallengeIds = challengeIds
+        });
 }

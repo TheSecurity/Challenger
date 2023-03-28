@@ -2,7 +2,7 @@
 
 public enum SelectionType
 {
-    NotSelected = 0,
-    Available = 1,
+    Disabled = 0,
+    NotSelected = 1,
     Selected = 2
 }
