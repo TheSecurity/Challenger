@@ -1,0 +1,150 @@
+<h1>Challenge Tool</h1>
+
+<div class="form-component">
+    <label for="challenges">Choose a challenge:</label>
+    <select name="challenges" id="challenges">
+    </select>
+</div>
+
+<div class="form-component">
+    <label for="challenges">Choose a champion:</label>
+    <select name="champions" id="champions">
+    </select>
+</div>
+
+
+<button onclick="add_champion_challenge();" class="form-component">
+    Save
+</button>
+
+<h3>Selected items</h3>
+<div style="display: flex">
+    <button onclick="export_data();">Export</button>
+</div>
+
+<table>
+    <thead>
+        <td>Challenge</td>
+        <td>Champion</td>
+        <td>Actions</td>
+    </thead>
+    <tbody id="itemsContainer">
+
+    </tbody>
+</table>
+
+
+<style>
+.form-component {
+    margin: 5px;
+}
+select, label {
+    display:block;
+}
+</style>
+
+<script>
+    var items = [];
+
+    addEventListener("DOMContentLoaded", async (event) =>{
+        await load_challenges();
+        await load_champions();
+    });
+
+    async function get_data(filename) {
+        return await fetch(filename)
+            .then((response) => response.json())
+    }
+
+    async function load_challenges() {
+        let challenges = await get_data("./challenges.json")
+        let select = document.getElementById("challenges");
+
+        load_select_values(select, challenges);
+    }
+
+    async function load_champions() {
+        let champions = await get_data("./champions.json")
+        let select = document.getElementById("champions");
+
+        load_select_values(select, champions);
+    }
+
+    function load_select_values(parent, items) {
+        items.forEach((e) =>{
+            var el = document.createElement("option");
+            el.textContent = e.Name;
+            el.value = e.Id;
+            parent.appendChild(el);
+        });
+    }
+
+    function add_champion_challenge(){
+        let champSelect = document.getElementById("champions");
+        let challengeSelect = document.getElementById("challenges");
+
+        let obj = {
+            ChampionId: champSelect.value,
+            ChampionName: champSelect.options[champSelect.selectedIndex].text,
+            ChallengeId: challengeSelect.value,
+            ChallengeName: challengeSelect.options[challengeSelect.selectedIndex].text
+        }
+
+        if(items.some(x => x.ChallengeId == obj.ChallengeId && x.ChampionId == obj.ChampionId))
+        {
+            alert("Champion: " + obj.ChampionName + " Challenge: " + obj.ChallengeName + " was already added!");
+            return;
+        }
+
+        items.push(obj);
+        refresh_items();
+    }
+
+    function export_data() {
+        download(JSON.stringify(items, null, 2));
+    }
+
+    function download(content) {
+        var a = document.createElement("a");
+        var file = new Blob([content], {type: "text/json"});
+        a.href = URL.createObjectURL(file);
+        a.download = "challenge_champions.json";
+        a.click();
+    }
+
+    function remove_champion_challenge(challengeId, championId) {
+        items = items.filter(x => x.ChallengeId != challengeId || x.ChampionId != championId);
+
+        refresh_items();
+    }
+
+    function refresh_items(){
+        let container = document.getElementById("itemsContainer");
+        container.innerHTML = "";
+
+        items.forEach((item) => {
+            let row = document.createElement("tr");
+
+            let td1 = document.createElement("td");
+            td1.textContent = item.ChallengeName;
+
+            let td2 = document.createElement("td");
+            td2.textContent = item.ChampionName;
+
+            let td3 = document.createElement("td");
+            let btn = document.createElement("button");
+            btn.innerHTML = 'Delete';
+            btn.onclick = function() {
+                remove_champion_challenge(item.ChallengeId, item.ChampionId);
+                return false;
+            }
+            td3.appendChild(btn);
+
+            row.appendChild(td1);
+            row.appendChild(td2);
+            row.appendChild(td3);
+
+            container.appendChild(row);
+        });
+    }
+</script>
