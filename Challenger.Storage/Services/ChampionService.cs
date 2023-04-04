@@ -13,9 +13,15 @@ public class ChampionService : IChampionService
         _championRepository = championRepository;
     }
 
-    public async Task CreateChampionsAsync(string name, string imageUrl, IEnumerable<ObjectId>? challengeIds = null)
-        => await _championRepository.CreateChampionAsync(name, imageUrl, challengeIds);
+    public async Task CreateChampionsAsync(Champion champion)
+        => await _championRepository.CreateChampionAsync(champion);
+
+    public async Task<Champion> GetChampionAsync(ObjectId championId)
+        => await _championRepository.GetChampionAsync(championId);
 
     public async Task<IEnumerable<Champion>> GetChampionsAsync()
         => await _championRepository.GetChampionsAsync();
+
+    public async Task UpdateChampionsAsync(ObjectId id, Champion champion)
+        => await _championRepository.UpdateChampionsAsync(id, champion);
 }

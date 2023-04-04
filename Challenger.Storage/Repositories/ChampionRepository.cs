@@ -18,11 +18,13 @@ public class ChampionRepository : IChampionRepository
         => await _champions.Find(Builders<Champion>.Filter.Empty)
             .ToListAsync();
 
-    public async Task CreateChampionAsync(string name, string imageUrl, IEnumerable<ObjectId>? challengeIds = null)
-        => await _champions.InsertOneAsync(new Champion
-        {
-            Name = name,
-            ImageUrl = imageUrl,
-            ChallengeIds = challengeIds
-        });
+    public async Task CreateChampionAsync(Champion champion)
+        => await _champions.InsertOneAsync(champion);
+
+    public async Task<Champion> GetChampionAsync(ObjectId championId)
+        => await _champions.Find(Builders<Champion>.Filter.Eq(x => x.Id, championId))
+            .FirstOrDefaultAsync();
+
+    public async Task UpdateChampionsAsync(ObjectId id, Champion champion)
+        => await _champions.ReplaceOneAsync(Builders<Champion>.Filter.Eq(x => x.Id, id), champion, new ReplaceOptions { IsUpsert = true });
 }
