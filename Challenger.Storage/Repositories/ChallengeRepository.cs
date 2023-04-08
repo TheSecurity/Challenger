@@ -18,12 +18,13 @@ public class ChallengeRepository : IChallengeRepository
         => await _challenges.Find(Builders<Challenge>.Filter.Empty)
             .ToListAsync();
 
-    public async Task CreateChallengeAsync(int externalId, string name, string imageUrl, IEnumerable<ObjectId>? championIds)
-        => await _challenges.InsertOneAsync(new Challenge
-        {
-            ExternalId = externalId,
-            Name = name,
-            ImageUrl = imageUrl,
-            ChampionIds = championIds
-        });
+    public async Task CreateChallengeAsync(Challenge challenge)
+        => await _challenges.InsertOneAsync(challenge);
+
+    public async Task<Challenge> GetChallengeAsync(ObjectId challengeObjectId)
+        => await _challenges.Find(Builders<Challenge>.Filter.Eq(x => x.Id, challengeObjectId))
+            .FirstOrDefaultAsync();
+
+    public async Task UpdateChallengeAsync(ObjectId id, Challenge challenge)
+        => await _challenges.ReplaceOneAsync(Builders<Challenge>.Filter.Eq(x => x.Id, id), challenge, new ReplaceOptions { IsUpsert = true });
 }

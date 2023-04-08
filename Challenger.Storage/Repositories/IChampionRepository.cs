@@ -5,6 +5,8 @@ namespace Challenger.Core.Repositories;
 
 public interface IChampionRepository
 {
-    Task CreateChampionAsync(string name, string imageUrl, IEnumerable<ObjectId>? challengeIds = null);
+    Task CreateChampionAsync(Champion champion);
+    Task<Champion> GetChampionAsync(ObjectId championId);
     Task<IEnumerable<Champion>> GetChampionsAsync();
+    Task UpdateChampionsAsync(ObjectId id, Champion champion);
 }

@@ -6,6 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddCoreServices();
+builder.Configuration.AddJsonFile("appsettings.json", optional: false)
+           .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+           .AddUserSecrets<Program>()
+           .AddEnvironmentVariables();
 
 var app = builder.Build();
 

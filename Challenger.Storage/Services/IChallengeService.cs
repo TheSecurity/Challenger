@@ -6,5 +6,7 @@ namespace Challenger.Core.Services;
 public interface IChallengeService
 {
     Task<IEnumerable<Challenge>> GetChallengesAsync();
-    Task CreateChallengeAsync(int externalId, string name, string imageUrl, IEnumerable<ObjectId>? championIds = null);
+    Task CreateChallengeAsync(Challenge challenge);
+    Task<Challenge> GetChallengeAsync(ObjectId challengeObjectId);
+    Task UpdateChallengeAsync(ObjectId id, Challenge challenge);
 }
